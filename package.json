@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@feathersjs/feathers": "^4.5.7",
+    "chalk": "^4.1.0",
     "lodash.get": "^4.4.2",
     "winston": "^3.3.3",
     "winston-transport": "^4.4.0"
