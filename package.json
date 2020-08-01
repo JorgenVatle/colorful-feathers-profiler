@@ -1,5 +1,5 @@
 {
-  "name": "colorful-feathers-logs",
+  "name": "colorful-feathers-profiler",
   "version": "1.0.0",
   "description": "🧪 A more colorful Feathers service logger. Credit to feathers-profiler",
   "main": "dist/index.js",
