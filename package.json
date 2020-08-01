@@ -22,5 +22,8 @@
   "homepage": "https://github.com/JorgenVatle/colorful-feathers-logs#readme",
   "devDependencies": {
     "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@feathersjs/feathers": "^4.5.7"
   }
 }
