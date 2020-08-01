@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/JorgenVatle/colorful-feathers-logs/issues"
   },
-  "homepage": "https://github.com/JorgenVatle/colorful-feathers-logs#readme"
+  "homepage": "https://github.com/JorgenVatle/colorful-feathers-logs#readme",
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  }
 }
