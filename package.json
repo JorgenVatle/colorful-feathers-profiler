@@ -13,6 +13,12 @@
     "type": "git",
     "url": "git+https://github.com/JorgenVatle/colorful-feathers-logs.git"
   },
+  "files": [
+    "tsconfig.json",
+    "README.md",
+    "dist",
+    "src"
+  ],
   "keywords": [
     "logging",
     "feathers"
