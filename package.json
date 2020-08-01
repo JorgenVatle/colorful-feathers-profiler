@@ -8,6 +8,7 @@
     "prepack": "tsc",
     "prepublish": "git push && git push --tags"
   },
+  "types": "src/index.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JorgenVatle/colorful-feathers-logs.git"
