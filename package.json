@@ -1,0 +1,23 @@
+{
+  "name": "colorful-feathers-logs",
+  "version": "1.0.0",
+  "description": "🧪 A more colorful Feathers service logger. Credit to feathers-profiler",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JorgenVatle/colorful-feathers-logs.git"
+  },
+  "keywords": [
+    "logging",
+    "feathers"
+  ],
+  "author": "Jørgen <Jorgen@WcAServices.net> (https://github.com/JorgenVatle)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JorgenVatle/colorful-feathers-logs/issues"
+  },
+  "homepage": "https://github.com/JorgenVatle/colorful-feathers-logs#readme"
+}
