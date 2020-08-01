@@ -19,3 +19,8 @@ App.configure(FeathersProfiler({
     useInProduction: true, // Default: false
 }))
 ```
+
+## License
+This repository is licensed under the ISC license.
+
+Copyright (c) 2020, Jørgen Vatle.
