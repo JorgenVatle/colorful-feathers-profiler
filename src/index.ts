@@ -1,4 +1,4 @@
-import { HookContext } from '@feathersjs/feathers';
+import { Application, HookContext } from '@feathersjs/feathers';
 import { get } from 'lodash';
 import Chalk from 'chalk';
 
@@ -74,12 +74,12 @@ function assignColor(path: string) {
 }
 
 export default ({ useInProduction = false } = {}) => {
-    return () => {
+    return (App: Application) => {
         if (!useInProduction && process.env.NODE_ENV === 'production') {
             return;
         }
 
-        return require('feathers-profiler').profiler({
+        return App.configure(require('feathers-profiler').profiler({
             logMsg(hook: HookContext & { _log: any, original: any }) {
                 hook._log = hook._log || {};
                 const elapsed = Math.round(hook._log.elapsed / 1e5) / 10;
@@ -94,6 +94,6 @@ export default ({ useInProduction = false } = {}) => {
 
                 return logMessage;
             },
-        });
+        }));
     }
 }
