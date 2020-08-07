@@ -73,9 +73,13 @@ function assignColor(path: string) {
     return Chalk[color](path);
 }
 
-export default ({ useInProduction = false } = {}) => {
+export default ({ useInProduction = false, useInTests = false } = {}) => {
     return (App: Application) => {
         if (!useInProduction && process.env.NODE_ENV === 'production') {
+            return;
+        }
+
+        if (!useInTests && process.env.NODE_ENV === 'test') {
             return;
         }
 
