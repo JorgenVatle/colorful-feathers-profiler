@@ -4,11 +4,12 @@
 
 
 ## Installation
+1. Install
 ```bash
 npm install colorful-feathers-profiler
 ```
 
-Add the profiler to your Feathers app:
+2. Add the profiler to your Feathers app:
 ```typescript
 import Feathers from '@feathersjs/feathers';
 import FeathersProfiler from 'colorful-feathers-profiler';
@@ -19,6 +20,10 @@ App.configure(FeathersProfiler({
     useInProduction: true, // Default: false
 }))
 ```
+
+3. Enjoy!
+
+![Console Preview](https://i.gyazo.com/1fb66e2e4529f712c88a075c7be39e87.png)
 
 ## License
 This repository is licensed under the ISC license.
