@@ -26,10 +26,17 @@ export class ObjectLogFormatter implements Formatter<ObjectLog> {
     public format(): ObjectLog {
         const data = this.parser.data;
         const method = Chalk.bgCyan(data.method.toString().toUpperCase());
+        let provider = Chalk.yellowBright(data.provider);
+        let route = data.route;
+        
+        if (data.provider === 'server') {
+            provider = Chalk.gray(data.provider);
+            route = assignColor(data.route);
+        }
         
         return {
             ...data,
-            message: `${method} ${assignColor(data.route)} [${data.provider}]`,
+            message: `${method} ${route} [${provider}]`,
         };
     }
 }
