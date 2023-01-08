@@ -1,16 +1,11 @@
-import Feathers, { Id, Params } from '@feathersjs/feathers';
+import Feathers from '@feathersjs/feathers';
 import ColorfulFeathersProfiler from '../../src';
+import LoggerService from './Services/LoggerService';
+
 
 const services = {
-    'test-service': new class {
-        async get(id: Id) {
-            return `Fetching ${id}`;
-        }
-    
-        async find(params: Params) {
-            return `Finding with ${JSON.stringify({ params })}`
-        }
-    }
+    'test-service-1': new LoggerService(),
+    'test-service-2': new LoggerService(),
 } as const;
 
 const App = Feathers<typeof services>();
@@ -26,7 +21,8 @@ App.configure(ColorfulFeathersProfiler({
 }));
 
 setTimeout(async () => {
-    const service = App.service('test-service');
-    await service.find({ query: { foo: 'bar' } });
-    await service.get('some-id');
+    for (const [path, service] of Object.entries(App.services)) {
+        await service.find({ query: { foo: 'bar' } });
+        await service.get('some-id');
+    }
 }, 50)
