@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "start": "ts-node src/App",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/JorgenVatle/colorful-feathers-profiler/issues"
   },
-  "homepage": "https://github.com/JorgenVatle/colorful-feathers-profiler#readme"
+  "homepage": "https://github.com/JorgenVatle/colorful-feathers-profiler#readme",
+  "dependencies": {
+    "ts-node-dev": "^2.0.0"
+  }
 }
