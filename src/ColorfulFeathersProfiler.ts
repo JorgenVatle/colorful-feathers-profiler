@@ -13,28 +13,13 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
         const profiler = FeathersProfiler({
             logger,
             logMsg(hook) {
-                const context = new Parser(hook).logObject;
-    
+                const parser = new Parser(hook);
+                
                 if (logStyle === 'object') {
-                    return context;
+                    return new ObjectLogFormatter(parser).format();
                 }
-    
-                if (context.provider !== 'server') {
-                    context.provider = Chalk.yellowBright(context.provider);
-                    context.route = assignColor(context.route);
-                }
-    
-                let time = `${timestamp()}`
-                let header = `${context.route}::${context.method}`;
-                let trailer = `(${context.provider}) ${context.duration} ms - ${getPending()} pending`;
-                let error = '';
-    
-                if (context.error) {
-                    error = `\n [${context.hook.type}: ${context.method}]\n   ${context.error.stack || ''}`;
-                    header = Chalk.red(`[ERROR] ${header}`);
-                }
-    
-                return `${time} ${header} ${trailer} ${error}`;
+                
+                return new StringLogFormatter(parser).format();
             },
         })
         
@@ -58,17 +43,12 @@ class Parser {
         }
     };
     
-    public get logObject(): ParsedContext {
+    public get data(): ParsedContext {
         return {
             ...this.base,
             statusCode: this.statusCode,
             level: this.level,
-            message: this.message,
         }
-    }
-    
-    protected get message() {
-        return `${this.base.method.toString().toUpperCase()} ${this.base.route} [${this.base.provider}]`
     }
     
     protected get level(): ParsedContext['level'] {
@@ -91,8 +71,44 @@ class Parser {
     
 }
 
+class ObjectLogFormatter implements Formatter<ObjectLog> {
+    constructor(protected readonly parser: Parser) {}
+    
+    public format(): ObjectLog {
+        const data = this.parser.data;
+        return {
+            ...data,
+            message: `${data.method.toString().toUpperCase()} ${data.route} [${data.provider}]`
+        }
+    }
+}
+
+class StringLogFormatter implements Formatter<string> {
+    constructor(protected readonly parser: Parser) {}
+    
+    public format(): string {
+        const data: ColorizedContext = Object.assign({}, this.parser.data);
+    
+        if (data.provider !== 'server') {
+            data.provider = Chalk.yellowBright(data.provider);
+            data.route = assignColor(data.route);
+        }
+    
+        let time = `${timestamp()}`
+        let header = `${data.route}::${data.method}`;
+        let trailer = `(${data.provider}) ${data.duration} ms - ${getPending()} pending`;
+        let error = '';
+    
+        if (data.error) {
+            error = `\n [${data.hook.type}: ${data.method}]\n   ${data.error.stack || ''}`;
+            header = Chalk.red(`[ERROR] ${header}`);
+        }
+    
+        return `${time} ${header} ${trailer} ${error}`;
+    }
+}
+
 interface ParsedContext {
-    message: string;
     level: 'info' | 'error';
     duration: number;
     route: string;
@@ -103,6 +119,18 @@ interface ParsedContext {
     };
     error?: Error | FeathersError;
     statusCode?: number;
+}
+
+interface ObjectLog extends ColorizedContext {
+    message: string;
+}
+
+interface Formatter<Format> {
+    format(): Format;
+}
+
+type ColorizedContext = {
+    [key in keyof ParsedContext as key & string]: ParsedContext[key] extends string ? string : ParsedContext[key];
 }
 
 /**
