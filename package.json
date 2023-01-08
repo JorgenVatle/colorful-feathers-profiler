@@ -39,5 +39,8 @@
     "chalk": "^4.1.2",
     "feathers-profiler": "^0.1.5",
     "lodash.get": "^4.4.2"
-  }
+  },
+  "workspaces": [
+    "example"
+  ]
 }
