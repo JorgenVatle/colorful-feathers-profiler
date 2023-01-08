@@ -46,7 +46,7 @@ function parseContext(hook: ProfilerContext): ParsedContext {
     const error = hook.error;
     const method = hook.method;
     const route = hook._log.route.replace(/^\/*/, '/');
-    const statusCode = hook.statusCode;
+    const statusCode = hook.statusCode || !error ? 200 : error.statusCode || 500;
     const type = hook.original?.type || hook.type;
     const level = error ? 'error' : 'info';
     const message = `${method} ${route} [${provider}]`;
