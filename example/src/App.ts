@@ -8,6 +8,7 @@ import LoggerService from './Services/LoggerService';
 const services = {
     'test-service-1': new LoggerService(),
     'test-service-2': new LoggerService(),
+    'keepalive': new LoggerService(),
 } as const;
 
 const App = Feathers<typeof services>();
@@ -31,4 +32,13 @@ setTimeout(async () => {
     await App.service('test-service-1').find({ query: { throw: new Error('Testing error handling') } }).catch(() => {})
     
     console.log(Util.inspect(getProfile(), { colors: true, depth: null }))
-}, 50)
+}, 50);
+
+let keepAliveCount = 0;
+
+/**
+ * Keep the app running until explicitly exited by the user.
+ */
+setInterval(async () => {
+    await App.services.keepalive.get(keepAliveCount += 1);
+}, 60_000)
