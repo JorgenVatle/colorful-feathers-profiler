@@ -10,6 +10,7 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
         }
         
         const profiler = FeathersProfiler({
+            logger,
             logMsg(hook) {
                 const context = parseContext(hook);
     
