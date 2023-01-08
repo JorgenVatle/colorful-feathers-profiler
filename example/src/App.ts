@@ -1,4 +1,5 @@
 import Feathers, { Id, Params } from '@feathersjs/feathers';
+import ColorfulFeathersProfiler from '../../src';
 
 const App = Feathers();
 App.use('test-service', new class {
@@ -9,4 +10,9 @@ App.use('test-service', new class {
     async find(params: Params) {
         return `Finding with ${JSON.stringify({ params })}`
     }
-})
+});
+
+App.configure(ColorfulFeathersProfiler({
+    enabled: true,
+    logger: console,
+}))
