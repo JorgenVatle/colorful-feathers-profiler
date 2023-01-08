@@ -19,4 +19,10 @@ const App = Feathers<typeof services>();
 App.configure(ColorfulFeathersProfiler({
     enabled: true,
     logger: console,
-}))
+}));
+
+setTimeout(async () => {
+    const service = App.service('test-service');
+    await service.find({ query: { foo: 'bar' } });
+    await service.get('some-id');
+}, 50)
