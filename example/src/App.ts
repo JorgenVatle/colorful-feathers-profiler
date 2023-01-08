@@ -15,6 +15,10 @@ const services = {
 
 const App = Feathers<typeof services>();
 
+for (const [path, service] of Object.entries(services)) {
+    App.use(path, service);
+}
+
 
 App.configure(ColorfulFeathersProfiler({
     enabled: true,
