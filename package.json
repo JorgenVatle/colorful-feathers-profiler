@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@feathersjs/feathers": "^4.5.7",
-    "chalk": "^4.1.0",
+    "chalk": "^4.1.2",
     "feathers-profiler": "^0.1.5",
     "lodash.get": "^4.4.2"
   }
