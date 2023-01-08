@@ -2,6 +2,7 @@ import { Application, HookContext } from '@feathersjs/feathers';
 import Chalk from 'chalk';
 import { get } from 'lodash';
 import { assignColor } from './Utilities/ColorPicker';
+import { profiler as FeathersProfiler } from 'feathers-profiler';
 
 export default function ColorfulFeathersProfiler({ enabled = true, logger = console }: ProfilerOptions) {
     return (App: Application) => {
@@ -9,7 +10,7 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
             logger.warn('ColorfulFeathersProfiler has been disabled!')
         }
         
-        return App.configure(require('feathers-profiler').profiler({
+        const profiler = FeathersProfiler({
             logMsg(hook: HookContext & { _log: any, original: any }) {
                 hook._log = hook._log || {};
                 const elapsed = Math.round(hook._log.elapsed / 1e5) / 10;
@@ -17,14 +18,16 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
                 const provider = Chalk.yellowBright(get(hook.params, 'provider', Chalk.grey('server')));
                 const trailer = `(${provider}) ${elapsed} ms - ${pending} pending`;
                 let logMessage = `${header} ${trailer}`;
-                
+        
                 if (hook.error) {
                     logMessage += ` - ${Chalk.red('FAILED')} ${(hook.original || {}).type} ${hook.error.message || ''}`;
                 }
-                
+        
                 return logMessage;
             },
-        }));
+        })
+        
+        return App.configure(profiler);
     }
 }
 
