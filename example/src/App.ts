@@ -1,4 +1,6 @@
 import Feathers from '@feathersjs/feathers';
+import { getProfile } from 'feathers-profiler';
+import * as Util from 'util';
 import ColorfulFeathersProfiler from '../../src';
 import LoggerService from './Services/LoggerService';
 
@@ -25,4 +27,6 @@ setTimeout(async () => {
         await service.find({ query: { foo: 'bar' } });
         await service.get('some-id');
     }
+    
+    console.log(Util.inspect(getProfile(), { colors: true, depth: null }))
 }, 50)
