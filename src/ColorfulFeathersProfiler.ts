@@ -13,9 +13,12 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
         const profiler = FeathersProfiler({
             logMsg(hook) {
                 const elapsed = Math.round(hook._log.elapsed / 1e5) / 10;
-                const header = `${timestamp()} ${hook.params.provider ? assignColor(hook._log.route) : hook._log.route}::${hook.method}`;
+                const route = hook.params.provider ? assignColor(hook._log.route) : hook._log.route;
                 const provider = Chalk.yellowBright(get(hook.params, 'provider', Chalk.grey('server')));
+                
+                const header = `${timestamp()} ${route}::${hook.method}`;
                 const trailer = `(${provider}) ${elapsed} ms - ${pending} pending`;
+                
                 let logMessage = `${header} ${trailer}`;
         
                 if (hook.error) {
