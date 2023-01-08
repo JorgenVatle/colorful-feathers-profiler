@@ -11,7 +11,7 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
         }
         
         const profiler = FeathersProfiler({
-            logMsg(hook: HookContext & { _log: any, original: any }) {
+            logMsg(hook) {
                 hook._log = hook._log || {};
                 const elapsed = Math.round(hook._log.elapsed / 1e5) / 10;
                 const header = `${timestamp()} ${hook.params.provider ? assignColor(hook._log.route) : hook._log.route}::${hook.method}`;
