@@ -41,4 +41,4 @@ let keepAliveCount = 0;
  */
 setInterval(async () => {
     await App.services.keepalive.get(keepAliveCount += 1);
-}, 60_000)
+}, 5_000)
