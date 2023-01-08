@@ -3,13 +3,13 @@ import Chalk from 'chalk';
 import { get } from 'lodash';
 import { assignColor } from './Utilities/ColorPicker';
 
-export default ({ useInProduction = false, useInTests = false } = {}) => {
+export default (options: ProfilerOptions = {
+    enabledInEnvironments: ['development', 'production'],
+}) => {
     return (App: Application) => {
-        if (!useInProduction && process.env.NODE_ENV === 'production') {
-            return;
-        }
+        const environment = process.env.NODE_ENV || 'development';
         
-        if (!useInTests && process.env.NODE_ENV === 'test') {
+        if (!options.enabledInEnvironments.includes(environment)) {
             return;
         }
         
@@ -45,4 +45,8 @@ function timestamp () {
     const date = new Date();
     const last2 = (numb: any) => `0${numb}`.slice(-2);
     return `${last2(date.getHours())}:${last2(date.getMinutes())}:${last2(date.getSeconds())}`;
+}
+
+interface ProfilerOptions {
+    enabledInEnvironments: Array<'production' | 'test' | 'development' | string>;
 }
