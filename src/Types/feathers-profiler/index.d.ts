@@ -8,7 +8,7 @@ declare module 'feathers-profiler' {
             hrtime: [number, number];
             elapsed: number;
         };
-        original?: unknown;
+        original?: HookContext;
     }
     
     interface ProfilerOptions {
