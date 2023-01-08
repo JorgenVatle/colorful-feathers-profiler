@@ -17,7 +17,10 @@ import FeathersProfiler from 'colorful-feathers-profiler';
 const App = Feathers();
 
 App.configure(FeathersProfiler({
-    useInProduction: true, // Default: false
+    enabled: true, // Use to turn off the profiler in environments where it doesn't make sense.
+    logger: console, // (optional) specify to use your own logger interface.
+    logStyle: 'object' // (optional) will log metadata objects instead of plaintext messages to the console. 
+    // Intended to be plugged into Winson.
 }))
 ```
 
