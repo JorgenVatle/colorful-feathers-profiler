@@ -3,14 +3,10 @@ import Chalk from 'chalk';
 import { get } from 'lodash';
 import { assignColor } from './Utilities/ColorPicker';
 
-export default (options: ProfilerOptions = {
-    enabledInEnvironments: ['development', 'production'],
-}) => {
+export default function ColorfulFeathersProfiler({ enabled = true, logger = console }: ProfilerOptions) {
     return (App: Application) => {
-        const environment = process.env.NODE_ENV || 'development';
-        
-        if (!options.enabledInEnvironments.includes(environment)) {
-            return;
+        if (!enabled) {
+            logger.warn('ColorfulFeathersProfiler has been disabled!')
         }
         
         return App.configure(require('feathers-profiler').profiler({
@@ -48,5 +44,10 @@ function timestamp () {
 }
 
 interface ProfilerOptions {
-    enabledInEnvironments: Array<'production' | 'test' | 'development' | string>;
+    enabled: boolean;
+    logger: CompatibleLogger;
 }
+
+
+type CompatibleLogger = Record<'log' | 'warn' | 'error', LogFunction>;
+type LogFunction = (message: any) => void;
