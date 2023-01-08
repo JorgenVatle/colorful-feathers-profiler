@@ -1,5 +1,5 @@
 import { FeathersError } from '@feathersjs/errors';
-import { Application, ServiceMethods } from '@feathersjs/feathers';
+import { Application, HookContext, ServiceMethods } from '@feathersjs/feathers';
 import Chalk from 'chalk';
 import { assignColor } from './Utilities/ColorPicker';
 import { getPending, profiler as FeathersProfiler, ProfilerContext, timestamp } from 'feathers-profiler';
@@ -13,7 +13,7 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
         const profiler = FeathersProfiler({
             logger,
             logMsg(hook) {
-                const context = parseContext(hook);
+                const context = new Parser(hook).logObject;
     
                 if (logStyle === 'object') {
                     return context;
@@ -23,7 +23,6 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
                     context.provider = Chalk.yellowBright(context.provider);
                     context.route = assignColor(context.route);
                 }
-    
     
                 let time = `${timestamp()}`
                 let header = `${context.route}::${context.method}`;
@@ -43,44 +42,53 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
     }
 }
 
-function parseContext(hook: ProfilerContext): ParsedContext {
-    const base: Pick<ParsedContext, 'provider' | 'error' | 'method' | 'route' | 'hook' | 'duration' | 'statusCode'> = {
-        provider: hook.params.provider || 'server',
-        error: hook.error,
-        method: hook.method,
-        route: hook._log.route.replace(/^\/*/, '/'),
-        duration: Math.round(hook._log.elapsed / 1e5) / 10,
-        hook: {
-            type: hook.original?.type || hook.type
-        },
-        statusCode: inferStatusCode(hook),
+class Parser {
+    protected base: Pick<ParsedContext, 'provider' | 'error' | 'method' | 'route' | 'hook' | 'duration'>;
+    
+    constructor(protected readonly hook: ProfilerContext) {
+        this.base = {
+            provider: hook.params.provider || 'server',
+            error: hook.error,
+            method: hook.method,
+            route: hook._log.route.replace(/^\/*/, '/'),
+            duration: Math.round(hook._log.elapsed / 1e5) / 10,
+            hook: {
+                type: hook.original?.type || hook.type
+            },
+        }
+    };
+    
+    public get logObject(): ParsedContext {
+        return {
+            ...this.base,
+            statusCode: this.statusCode,
+            level: this.level,
+            message: this.message,
+        }
     }
     
-    const computed: Omit<ParsedContext, keyof typeof base> = {
-        message: `${base.method.toString().toUpperCase()} ${base.route} [${base.provider}]`,
-        level: base.error ? 'error' : 'info',
+    protected get message() {
+        return `${this.base.method.toString().toUpperCase()} ${this.base.route} [${this.base.provider}]`
     }
     
-    return {
-        ...base,
-        ...computed,
-    }
-}
-
-function inferStatusCode(hook: ProfilerContext) {
-    if (hook.statusCode) {
-        return hook.statusCode;
+    protected get level(): ParsedContext['level'] {
+        return this.base.error ? 'error' : 'info';
     }
     
-    if (!hook.error) {
+    protected get statusCode(): ParsedContext['statusCode'] {
+        const { error, statusCode } = this.hook;
+        
+        if (statusCode) {
+            return statusCode;
+        }
+    
+        if (error) {
+            return error.statusCode || 500;
+        }
+    
         return 200;
     }
     
-    if (!hook.error.statusCode) {
-        return 500;
-    }
-    
-    return hook.error.statusCode;
 }
 
 interface ParsedContext {
