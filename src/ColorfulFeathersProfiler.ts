@@ -42,22 +42,34 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
 }
 
 function parseContext(hook: ProfilerContext): ParsedContext {
+    const provider = hook.params.provider || 'server';
+    const error = hook.error;
+    const method = hook.method;
+    const route = hook._log.route;
+    const statusCode = hook.statusCode;
+    const type = hook.original?.type || hook.type;
+    const level = error ? 'error' : 'info';
+    const message = `${provider}->${route}::${method}`;
+    const duration = Math.round(hook._log.elapsed / 1e5) / 10;
+    
     return {
-        duration: Math.round(hook._log.elapsed / 1e5) / 10,
-        route: hook._log.route,
-        provider: hook.params.provider || 'server',
-        method: hook.method,
+        duration,
+        method,
         hook: {
-            type: hook.original?.type || hook.type,
+            type,
         },
-        result: {
-            status: hook.statusCode,
-            error: hook.error,
-        }
+        statusCode,
+        level,
+        message,
+        route,
+        provider,
+        error,
     }
 }
 
 interface ParsedContext {
+    message: string;
+    level: 'info' | 'error';
     duration: number;
     route: string;
     provider: 'server' | 'rest' | 'socketio' | string;
@@ -65,10 +77,8 @@ interface ParsedContext {
     hook: {
         type: 'before' | 'after' | 'error';
     };
-    result: {
-        error?: Error;
-        status?: number;
-    }
+    error?: Error;
+    statusCode?: number;
 }
 
 /**
