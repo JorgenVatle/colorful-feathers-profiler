@@ -3,7 +3,7 @@ import { ServiceMethods } from '@feathersjs/feathers';
 import { ProfilerContext } from 'feathers-profiler';
 
 export class Parser {
-    protected base: Pick<ParsedContext, 'provider' | 'error' | 'method' | 'route' | 'hook' | 'duration'>;
+    protected base: BaseContext;
     
     constructor(protected readonly hook: ProfilerContext) {
         this.base = {
@@ -45,6 +45,8 @@ export class Parser {
     }
     
 }
+
+type BaseContext = Pick<ParsedContext, 'provider' | 'error' | 'method' | 'route' | 'hook' | 'duration'>;
 
 export interface ParsedContext {
     level: 'info' | 'error';
