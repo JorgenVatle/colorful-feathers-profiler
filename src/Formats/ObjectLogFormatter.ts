@@ -1,3 +1,5 @@
+import Chalk from 'chalk';
+import { assignColor } from '../Utilities/ColorPicker';
 import { ParsedContext, Parser } from '../Utilities/ContextParser';
 import { Formatter } from './FormatterContract';
 
@@ -23,9 +25,11 @@ export class ObjectLogFormatter implements Formatter<ObjectLog> {
     
     public format(): ObjectLog {
         const data = this.parser.data;
+        const method = Chalk.bgCyan(data.method.toString().toUpperCase());
+        
         return {
             ...data,
-            message: `${data.method.toString().toUpperCase()} ${data.route} [${data.provider}]`,
+            message: `${method} ${assignColor(data.route)} [${data.provider}]`,
         };
     }
 }
