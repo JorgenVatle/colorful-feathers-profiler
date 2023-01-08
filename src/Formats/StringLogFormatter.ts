@@ -1,7 +1,7 @@
 import Chalk from 'chalk';
 import { getPending, timestamp } from 'feathers-profiler';
-import { assignColor } from '../ColorPicker';
-import { Parser } from '../ContextParser';
+import { assignColor } from '../Utilities/ColorPicker';
+import { Parser } from '../Utilities/ContextParser';
 import { Formatter } from './FormatterContract';
 import { ColorizedContext } from './ObjectLogFormatter';
 

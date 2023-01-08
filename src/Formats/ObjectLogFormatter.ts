@@ -1,4 +1,4 @@
-import { ParsedContext, Parser } from '../ContextParser';
+import { ParsedContext, Parser } from '../Utilities/ContextParser';
 import { Formatter } from './FormatterContract';
 
 export class ObjectLogFormatter implements Formatter<ObjectLog> {

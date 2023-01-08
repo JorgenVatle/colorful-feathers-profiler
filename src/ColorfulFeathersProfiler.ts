@@ -1,8 +1,8 @@
 import { Application } from '@feathersjs/feathers';
 import { profiler as FeathersProfiler } from 'feathers-profiler';
 import { Parser } from './Utilities/ContextParser';
-import { ObjectLogFormatter } from './Utilities/Formats/ObjectLogFormatter';
-import { StringLogFormatter } from './Utilities/Formats/StringLogFormatter';
+import { ObjectLogFormatter } from './Formats/ObjectLogFormatter';
+import { StringLogFormatter } from './Formats/StringLogFormatter';
 
 export default function ColorfulFeathersProfiler({ enabled = true, logger = console, logStyle = 'string' }: ProfilerOptions = {}) {
     return (App: Application) => {
