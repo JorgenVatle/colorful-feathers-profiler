@@ -3,7 +3,7 @@ import Chalk from 'chalk';
 import { assignColor } from './Utilities/ColorPicker';
 import { getPending, profiler as FeathersProfiler, ProfilerContext, timestamp } from 'feathers-profiler';
 
-export default function ColorfulFeathersProfiler({ enabled = true, logger = console, logStyle = 'string' }: ProfilerOptions) {
+export default function ColorfulFeathersProfiler({ enabled = true, logger = console, logStyle = 'string' }: ProfilerOptions = {}) {
     return (App: Application) => {
         if (!enabled) {
             logger.warn('ColorfulFeathersProfiler has been disabled!')
@@ -87,8 +87,8 @@ interface ParsedContext {
 let pending = 0;
 
 interface ProfilerOptions {
-    enabled: boolean;
-    logger: CompatibleLogger;
+    enabled?: boolean;
+    logger?: CompatibleLogger;
     logStyle?: 'object' | 'string';
 }
 
