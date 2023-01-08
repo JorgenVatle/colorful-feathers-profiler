@@ -1,3 +1,4 @@
+import { FeathersError } from '@feathersjs/errors';
 import { Application, ServiceMethods } from '@feathersjs/feathers';
 import Chalk from 'chalk';
 import { assignColor } from './Utilities/ColorPicker';
@@ -43,29 +44,43 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
 }
 
 function parseContext(hook: ProfilerContext): ParsedContext {
-    const provider = hook.params.provider || 'server';
-    const error = hook.error;
-    const method = hook.method;
-    const route = hook._log.route.replace(/^\/*/, '/');
-    const statusCode = hook.statusCode || !error ? 200 : error.statusCode || 500;
-    const type = hook.original?.type || hook.type;
-    const level = error ? 'error' : 'info';
-    const message = `${method.toUpperCase()} ${route} [${provider}]`;
-    const duration = Math.round(hook._log.elapsed / 1e5) / 10;
+    const base: Pick<ParsedContext, 'provider' | 'error' | 'method' | 'route' | 'hook' | 'duration' | 'statusCode'> = {
+        provider: hook.params.provider || 'server',
+        error: hook.error,
+        method: hook.method,
+        route: hook._log.route.replace(/^\/*/, '/'),
+        duration: Math.round(hook._log.elapsed / 1e5) / 10,
+        hook: {
+            type: hook.original?.type || hook.type
+        },
+        statusCode: inferStatusCode(hook),
+    }
+    
+    const computed: Omit<ParsedContext, keyof typeof base> = {
+        message: `${base.method.toString().toUpperCase()} ${base.route} [${base.provider}]`,
+        level: base.error ? 'error' : 'info',
+    }
     
     return {
-        duration,
-        method,
-        hook: {
-            type,
-        },
-        statusCode,
-        level,
-        message,
-        route,
-        provider,
-        error,
+        ...base,
+        ...computed,
     }
+}
+
+function inferStatusCode(hook: ProfilerContext) {
+    if (hook.statusCode) {
+        return hook.statusCode;
+    }
+    
+    if (!hook.error) {
+        return 200;
+    }
+    
+    if (!hook.error.statusCode) {
+        return 500;
+    }
+    
+    return hook.error.statusCode;
 }
 
 interface ParsedContext {
@@ -78,7 +93,7 @@ interface ParsedContext {
     hook: {
         type: 'before' | 'after' | 'error';
     };
-    error?: Error;
+    error?: Error | FeathersError;
     statusCode?: number;
 }
 
