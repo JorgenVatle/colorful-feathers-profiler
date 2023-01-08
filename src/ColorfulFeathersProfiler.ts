@@ -45,11 +45,11 @@ function parseContext(hook: ProfilerContext): ParsedContext {
     const provider = hook.params.provider || 'server';
     const error = hook.error;
     const method = hook.method;
-    const route = hook._log.route;
+    const route = hook._log.route.replace(/^\/*/, '/');
     const statusCode = hook.statusCode;
     const type = hook.original?.type || hook.type;
     const level = error ? 'error' : 'info';
-    const message = `${provider}->${route}::${method}`;
+    const message = `${method} ${route} [${provider}]`;
     const duration = Math.round(hook._log.elapsed / 1e5) / 10;
     
     return {
