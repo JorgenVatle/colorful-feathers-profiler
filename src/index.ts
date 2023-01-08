@@ -1,38 +1,12 @@
 import { Application, HookContext } from '@feathersjs/feathers';
-import { get } from 'lodash';
 import Chalk from 'chalk';
-
-type ColorName = 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray' | 'redBright'
-    | 'greenBright' | 'yellowBright' | 'blueBright' | 'magentaBright' | 'cyanBright' | 'whiteBright';
-
-const colors: ColorName[] = [
-    'cyanBright',
-    'greenBright',
-    'blueBright',
-    'magentaBright',
-    'green',
-    'blue',
-    'magenta',
-    'cyan',
-    'gray',
-    'black',
-    'yellowBright',
-    'redBright',
-    'whiteBright',
-    'red',
-    'yellow',
-    'white',
-];
+import { get } from 'lodash';
+import { assignColor } from './Utilities/ColorPicker';
 
 /**
  * Pending requests.
  */
 let pending = 0;
-
-/**
- * Colours by path.
- */
-const pathColours: { [key: string]: ColorName } = {};
 
 /**
  * Build timestamp.
@@ -42,35 +16,6 @@ function timestamp () {
     const date = new Date();
     const last2 = (numb: any) => `0${numb}`.slice(-2);
     return `${last2(date.getHours())}:${last2(date.getMinutes())}:${last2(date.getSeconds())}`;
-}
-
-/**
- * Fetch unused path colour.
- */
-function unusedColour() {
-    const available = colors.filter((color) => {
-        return Object.values(pathColours).indexOf(color) === -1;
-    });
-
-    if (!available.length) {
-        return colors[0];
-    }
-
-
-    return available[0];
-}
-
-/**
- * Assign colour to the given path.
- */
-function assignColor(path: string) {
-    let color = pathColours[path];
-
-    if (!color) {
-        color = pathColours[path] = unusedColour();
-    }
-
-    return Chalk[color](path);
 }
 
 export default ({ useInProduction = false, useInTests = false } = {}) => {
