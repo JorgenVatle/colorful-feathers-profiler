@@ -2,7 +2,7 @@ import { Application, HookContext } from '@feathersjs/feathers';
 import Chalk from 'chalk';
 import { get } from 'lodash';
 import { assignColor } from './Utilities/ColorPicker';
-import { profiler as FeathersProfiler } from 'feathers-profiler';
+import { profiler as FeathersProfiler, timestamp } from 'feathers-profiler';
 
 export default function ColorfulFeathersProfiler({ enabled = true, logger = console }: ProfilerOptions) {
     return (App: Application) => {
@@ -12,7 +12,6 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
         
         const profiler = FeathersProfiler({
             logMsg(hook) {
-                hook._log = hook._log || {};
                 const elapsed = Math.round(hook._log.elapsed / 1e5) / 10;
                 const header = `${timestamp()} ${hook.params.provider ? assignColor(hook._log.route) : hook._log.route}::${hook.method}`;
                 const provider = Chalk.yellowBright(get(hook.params, 'provider', Chalk.grey('server')));
@@ -20,7 +19,7 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
                 let logMessage = `${header} ${trailer}`;
         
                 if (hook.error) {
-                    logMessage += ` - ${Chalk.red('FAILED')} ${(hook.original || {}).type} ${hook.error.message || ''}`;
+                    logMessage += ` - ${Chalk.red('FAILED')} ${hook.original?.type} ${hook.error.message || ''}`;
                 }
         
                 return logMessage;
@@ -35,16 +34,6 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
  * Pending requests.
  */
 let pending = 0;
-
-/**
- * Build timestamp.
- * @src https://github.com/feathers-plus/feathers-profiler/blob/c7b6be5b52e90ae4a61f4d59672c5b89d9720605/src/index.js
- */
-function timestamp () {
-    const date = new Date();
-    const last2 = (numb: any) => `0${numb}`.slice(-2);
-    return `${last2(date.getHours())}:${last2(date.getMinutes())}:${last2(date.getSeconds())}`;
-}
 
 interface ProfilerOptions {
     enabled: boolean;
