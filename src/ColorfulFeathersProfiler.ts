@@ -28,8 +28,8 @@ export default function ColorfulFeathersProfiler({ enabled = true, logger = cons
                 let trailer = `(${context.provider}) ${context.duration} ms - ${getPending()} pending`;
                 let error = '';
     
-                if (context.result.error) {
-                    error = `\n [${context.hook.type}: ${context.method}]\n   ${context.result.error.stack || ''}`;
+                if (context.error) {
+                    error = `\n [${context.hook.type}: ${context.method}]\n   ${context.error.stack || ''}`;
                     header = Chalk.red(`[ERROR] ${header}`);
                 }
     
