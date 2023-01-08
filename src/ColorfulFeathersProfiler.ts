@@ -50,7 +50,7 @@ function parseContext(hook: ProfilerContext): ParsedContext {
     const statusCode = hook.statusCode || !error ? 200 : error.statusCode || 500;
     const type = hook.original?.type || hook.type;
     const level = error ? 'error' : 'info';
-    const message = `${method} ${route} [${provider}]`;
+    const message = `${method.toUpperCase()} ${route} [${provider}]`;
     const duration = Math.round(hook._log.elapsed / 1e5) / 10;
     
     return {
