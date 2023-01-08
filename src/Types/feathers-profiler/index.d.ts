@@ -9,5 +9,10 @@ declare module 'feathers-profiler' {
         stats?: 'none' | 'total' | 'detail' | null,
     }
     
+    function clearProfile(): void;
+    function getProfile(): unknown;
+    function timestamp(): string;
+    function getPending(): number;
+    
     function profiler(options: ProfilerOptions);
 }
