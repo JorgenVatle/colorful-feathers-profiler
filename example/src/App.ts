@@ -28,5 +28,7 @@ setTimeout(async () => {
         await service.get('some-id');
     }
     
+    await App.service('test-service-1').find({ query: { throw: new Error('Testing error handling') } }).catch(() => {})
+    
     console.log(Util.inspect(getProfile(), { colors: true, depth: null }))
 }, 50)

@@ -9,7 +9,10 @@ export default class LoggerService {
         return `Fetching ${id} with ${this.serialize({ params })}`;
     }
     
-    async find(params?: Params) {
+    async find(params?: Params & { query: { throw?: Error } }) {
+        if (params?.query.throw) {
+            throw params.query.throw;
+        }
         return `Finding with ${JSON.stringify({ params })}`
     }
     
