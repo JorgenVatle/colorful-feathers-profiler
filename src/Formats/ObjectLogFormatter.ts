@@ -1,6 +1,22 @@
 import { ParsedContext, Parser } from '../Utilities/ContextParser';
 import { Formatter } from './FormatterContract';
 
+/**
+ * Format the profiler log as an object. Useful for feeding through to Winston
+ *
+ * @example object fed to your logger:
+ * {
+ *   provider: 'server',
+ *   error: undefined,
+ *   method: 'get',
+ *   route: '/keepalive',
+ *   duration: 0,
+ *   hook: { type: 'after' },
+ *   statusCode: 200,
+ *   level: 'info',
+ *   message: 'GET /keepalive [server]'
+ * }
+ */
 export class ObjectLogFormatter implements Formatter<ObjectLog> {
     constructor(protected readonly parser: Parser) {
     }

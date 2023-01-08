@@ -5,6 +5,12 @@ import { Parser } from '../Utilities/ContextParser';
 import { Formatter } from './FormatterContract';
 import { ColorizedContext } from './ObjectLogFormatter';
 
+/**
+ * Formats the profiler log as a string.
+ *
+ * @example log
+ * `20:49:12 /my-test-service::get (server) 3.7 ms - 0 pending`
+ */
 export class StringLogFormatter implements Formatter<string> {
     constructor(protected readonly parser: Parser) {
     }
