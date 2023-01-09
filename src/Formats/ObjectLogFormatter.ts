@@ -25,7 +25,7 @@ export class ObjectLogFormatter implements Formatter<ObjectLog> {
     
     public format(): ObjectLog {
         const data = this.parser.data;
-        const method = Chalk.bgCyan.bold(data.method.toString().toUpperCase());
+        const method = Chalk.bgCyan(data.method.toString().toUpperCase());
         let provider = Chalk.yellowBright(data.provider);
         let route = data.route;
         
