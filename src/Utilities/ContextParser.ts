@@ -11,7 +11,7 @@ export class Parser {
             error: hook.error,
             method: hook.method,
             route: hook._log.route.replace(/^\/*/, '/'),
-            duration: Math.round(hook._log.elapsed / 1e5) / 10,
+            duration: hook._log.elapsed,
             hook: {
                 type: hook.original?.type || hook.type,
             },
@@ -23,11 +23,16 @@ export class Parser {
             ...this.base,
             statusCode: this.statusCode,
             level: this.level,
+            durationMs: this.durationMs,
         };
     }
     
     protected get level(): ParsedContext['level'] {
         return this.base.error ? 'error' : 'info';
+    }
+    
+    protected get durationMs() {
+        return Math.round(this.base.duration / 1e5) / 10
     }
     
     protected get statusCode(): ParsedContext['statusCode'] {
@@ -59,4 +64,5 @@ export interface ParsedContext {
     };
     error?: Error | FeathersError;
     statusCode?: number;
+    durationMs: number;
 }

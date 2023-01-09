@@ -25,7 +25,7 @@ export class StringLogFormatter implements Formatter<string> {
         
         let time = `${timestamp()}`;
         let header = `${data.route}::${data.method}`;
-        let trailer = `(${data.provider}) ${data.duration} ms - ${getPending()} pending`;
+        let trailer = `(${data.provider}) ${data.durationMs} ms - ${getPending()} pending`;
         let error = '';
         
         if (data.error) {
