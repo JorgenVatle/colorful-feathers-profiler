@@ -1,5 +1,5 @@
 import { FeathersError } from '@feathersjs/errors';
-import { ServiceMethods } from '@feathersjs/feathers';
+import { HookContext, Params, ServiceMethods } from '@feathersjs/feathers';
 import { ProfilerContext } from 'feathers-profiler';
 
 export class Parser {
@@ -15,6 +15,9 @@ export class Parser {
             hook: {
                 type: hook.original?.type || hook.type,
             },
+            id: hook.id,
+            headers: hook.params.headers,
+            query: hook.params.query,
         };
     };
     
@@ -51,7 +54,7 @@ export class Parser {
     
 }
 
-type BaseContext = Pick<ParsedContext, 'provider' | 'error' | 'method' | 'route' | 'hook' | 'duration'>;
+type BaseContext = Pick<ParsedContext, 'provider' | 'error' | 'method' | 'route' | 'hook' | 'duration' | 'headers' | 'id' | 'query'>;
 
 export interface ParsedContext {
     level: 'info' | 'error';
@@ -65,4 +68,7 @@ export interface ParsedContext {
     error?: Error | FeathersError;
     statusCode?: number;
     durationMs: number;
+    headers?: Params['headers'],
+    query?: Params['query'],
+    id?: HookContext['id'],
 }
