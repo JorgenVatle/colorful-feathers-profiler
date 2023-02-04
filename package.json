@@ -1,6 +1,6 @@
 {
   "name": "colorful-feathers-profiler",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "🧪 A more colorful Feathers service logger. Credit to feathers-profiler",
   "main": "dist/index.js",
   "scripts": {
