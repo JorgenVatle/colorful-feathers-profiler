@@ -29,6 +29,10 @@ export class ObjectLogFormatter implements Formatter<ObjectLog> {
         let provider = Chalk.yellowBright(data.provider);
         let route = data.route;
         
+        if (data.id) {
+            route = `${route}/${data.id}`
+        }
+        
         if (data.provider === 'server') {
             provider = Chalk.gray(data.provider);
             route = assignColor(data.route);
