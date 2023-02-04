@@ -36,7 +36,7 @@ export class ObjectLogFormatter implements Formatter<ObjectLog> {
         
         return {
             ...data,
-            message: `${method} ${route} [${provider}] - ${data.durationMs}ms`,
+            message: `${method} ${route} - ${data.durationMs.toLocaleString()}ms [${provider}]`,
         };
     }
 }
